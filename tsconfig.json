@@ -1,0 +1,36 @@
+{
+  "compilerOptions": {
+    // "lib": [
+    //   "es6"
+    // ],
+    "target": "ES2016",
+    "module": "commonjs",
+    "lib": [
+      "es2017",
+      "es7",
+      "es6",
+      "dom"
+    ],
+    "noEmit": false /* Disable emitting files from a compilation. */,
+    "esModuleInterop": true /* Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility. */,
+    "noUncheckedIndexedAccess": false /* Add 'undefined' to a type when accessed using an index. */,
+    "moduleDetection": "force",
+    "declaration": false,
+    "allowJs": false,
+    // "rootDir": "./src",
+    "outDir": "./dist",
+    "verbatimModuleSyntax": false,
+    /* Linting */
+    "skipLibCheck": true,
+    "strict": true,
+    "noFallthroughCasesInSwitch": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": [
+    "src/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
+}

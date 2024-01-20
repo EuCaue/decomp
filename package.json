@@ -1,0 +1,22 @@
+{
+  "name": "decomp",
+  "type": "commonjs",
+  "version": "0.1.0",
+  "author": "Cauê Souza",
+  "license": "GPL3",
+  "description": "A simple way to decompress files.",
+  "bin": {
+    "decomp": "./dist/index.js"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "scripts": {
+    "prepublish": "npm run build",
+    "build": "tsc",
+    "dev": "bun run ./src/index.ts"
+  }
+}
