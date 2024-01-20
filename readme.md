@@ -4,7 +4,7 @@
 
 ## Usage
 
-<small><strong>NPM and NodeJS</strong> is Required.</small>
+<small><strong>NPM and NodeJS</strong> is required.</small>
 
 1. Install
 
