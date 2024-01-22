@@ -9,7 +9,7 @@
 1. Install
 
 ```sh
-npm install decomp -g
+npm install @eucaue/decomp -g
 ```
 
 2. Use
