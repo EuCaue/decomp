@@ -1,21 +1,32 @@
-//  TODO: do a better progress bar
-export default function createProgressBar(total: number) {
-  let currentProgress = 0;
-  process.stdout.write("[                    ] 0%");
-  return {
-    update: (increment: number) => {
-      if (currentProgress >= total) return;
-      currentProgress += increment;
-      const progress = Math.min(
-        Math.round((currentProgress / total) * 100),
-        100,
-      );
-      const progressBar =
-        "[" + "=".repeat(progress / 2) + " ".repeat(50 - progress / 2) + "]";
+const bar: string[] = [] as const;
+let firstRunInterval: boolean = true;
+let intervalId: NodeJS.Timeout;
 
-      process.stdout.clearLine(0);
-      process.stdout.cursorTo(0);
-      process.stdout.write(`${progressBar} ${progress}%`);
-    },
-  };
+function setBar(): void {
+  if (firstRunInterval === false) {
+    firstRunInterval = true;
+    process.stdout.write("\n");
+  }
+  if (bar.length >= 100) resetBar();
+  bar.push("#");
+  process.stdout.write(`${bar.join("")}`);
+}
+
+export function startBar(ms: number = 150): void {
+  intervalId = setInterval(() => {
+    setBar();
+  }, ms);
+}
+
+function resetBar(): void {
+  bar.length = 0;
+  bar.push("#");
+}
+
+export function stopBar(): void {
+  clearInterval(intervalId);
+  resetBar();
+  process.stdout.write("\n\n");
+  process.stdout.write(`${bar.join("").repeat(50)} 100%`);
+  process.stdout.write("\n");
 }

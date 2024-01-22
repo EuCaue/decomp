@@ -1,10 +1,12 @@
-import checkBin from "./checkBin";
 import { spawn } from "child_process";
 import { mkdirSync } from "fs";
 import { basename } from "path";
+import checkBin from "./checkBin";
+import { startBar, stopBar } from "./progressBar";
 
 type DecompCmd = string;
 type TarFileType = string;
+
 const FileExtensionToCommandMap = new Map([
   [".rar", "unrar"],
   [".7z", "7z"],
@@ -12,7 +14,7 @@ const FileExtensionToCommandMap = new Map([
   [".tar", "tar"],
 ]);
 
-const supportedFileTypes = [".rar", ".7z", ".zip", ".tar"];
+const supportedFileTypes = new Set([".rar", ".7z", ".zip", ".tar"]);
 
 const tarLongFileTypes: Set<TarFileType> = new Set([
   ".gz",
@@ -92,7 +94,7 @@ function getProgramCmd(file: string, fileType: string): DecompCmd {
     ? ".tar"
     : (fileType as keyof typeof FileExtensionToCommandMap);
 
-  const fileNameWithoutExt = basename(file, fileType);
+  const fileNameWithoutExt: string = basename(file, fileType);
 
   const cmdTypeKey = FileExtensionToCommandMap.get(
     selectedFileFormat as string,
@@ -101,9 +103,10 @@ function getProgramCmd(file: string, fileType: string): DecompCmd {
 }
 
 function checkFileTypes(fileType: string): boolean {
-  let isTar = tarLongFileTypes.has(fileType) || tarShortFileTypes.has(fileType);
+  let isTar: boolean =
+    tarLongFileTypes.has(fileType) || tarShortFileTypes.has(fileType);
   return (
-    (supportedFileTypes.includes(fileType) || isTar) &&
+    (supportedFileTypes.has(fileType) || isTar) &&
     checkBin(FileExtensionToCommandMap.get(isTar ? ".tar" : fileType)!)
   );
 }
@@ -113,12 +116,13 @@ export default function extractFile(filePath: string, fileType: string): void {
     const commandProcess = spawn(getProgramCmd(filePath, fileType), {
       shell: true,
     });
+    startBar();
     commandProcess.stdout.on("close", () => {
-      process.stdout.write("\n");
       process.stdout.write("-".repeat(basename(filePath).length * 2));
       process.stdout.write("\n");
       process.stdout.write(`File ${basename(filePath)} extracted\n`);
       process.stdout.write("-".repeat(basename(filePath).length * 2));
+      stopBar();
     });
   } else {
     console.error(`${basename(filePath)} has a unsupported file type!`);
