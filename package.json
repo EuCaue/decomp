@@ -1,12 +1,11 @@
 {
-  "name": "decomp",
-  "type": "commonjs",
+  "name": "@eucaue/decomp",
   "version": "0.1.0",
   "author": "Cauê Souza",
-  "license": "GPL3",
-  "description": "A simple way to decompress files.",
-  "bin": {
-    "decomp": "./dist/index.js"
+  "type": "commonjs",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/EuCaue/decomp.git"
   },
   "devDependencies": {
     "@types/bun": "latest"
@@ -14,6 +13,22 @@
   "peerDependencies": {
     "typescript": "^5.0.0"
   },
+  "bin": {
+    "decomp": "./dist/index.js"
+  },
+  "description": "A simple way to decompress files.",
+  "homepage": "https://github.com/EuCaue/decomp#readme",
+  "keywords": [
+    "unzip",
+    "7zip",
+    "bzip2",
+    "lzip",
+    "tar",
+    "unrar",
+    "decompress",
+    "extract"
+  ],
+  "license": "GPL3",
   "scripts": {
     "prepublish": "npm run build",
     "build": "tsc",

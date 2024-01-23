@@ -1,8 +1,5 @@
 {
   "compilerOptions": {
-    // "lib": [
-    //   "es6"
-    // ],
     "target": "ES2016",
     "module": "commonjs",
     "lib": [

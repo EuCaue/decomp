@@ -3,8 +3,8 @@ import { extname } from "path";
 import { exit } from "process";
 import extractFile from "./extractFile";
 
-const hasOneFile = process.argv.length === 3;
-const hasTwoOrMoreFiles = process.argv.length > 3;
+const hasOneFile: boolean = process.argv.length === 3;
+const hasTwoOrMoreFiles: boolean = process.argv.length > 3;
 
 function main(argPos: number): void {
   const file = process.argv[argPos];
@@ -13,7 +13,7 @@ function main(argPos: number): void {
 }
 
 if (hasOneFile) {
-  const argPos = 2;
+  const argPos: number = 2;
   main(argPos);
 } else if (hasTwoOrMoreFiles) {
   for (const argPos in process.argv) {
