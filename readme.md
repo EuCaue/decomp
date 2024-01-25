@@ -24,4 +24,4 @@ Contributions are welcome! Fork this repository, make your changes, and submit a
 
 ## License
 
-wfetch is licensed under the GPL3 License.
+decomp is licensed under the GPL3 License.
