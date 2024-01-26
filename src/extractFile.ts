@@ -117,6 +117,11 @@ function checkFileTypes(fileType: string): boolean {
   );
 }
 
+function flush() {
+  process.stdout.clearLine(0);
+  process.stdout.cursorTo(0);
+}
+
 export default function extractFile(filePath: string, fileType: string): void {
   if (checkFileTypes(fileType)) {
     const commandProcess = spawn(getProgramCmd(filePath, fileType), {
@@ -124,6 +129,7 @@ export default function extractFile(filePath: string, fileType: string): void {
     });
     startBar();
     commandProcess.stdout.on("end", () => {
+      flush();
       process.stdout.write("-".repeat(basename(filePath).length * 2));
       process.stdout.write("\n");
       process.stdout.write(`File ${basename(filePath)} extracted\n`);

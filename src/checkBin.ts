@@ -7,7 +7,7 @@ export default function checkBin(program: string): boolean {
   try {
     exec(`command -v ${program}`);
     isAvailableOnSystem = true;
-    console.info(`${program} it's available on your path.`);
+    // console.info(`${program} it's available on your path.`);
   } catch (error) {
     isAvailableOnSystem = false;
     console.error(`Error: ${program} it's not available on your path.`);

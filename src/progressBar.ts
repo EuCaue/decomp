@@ -44,7 +44,7 @@ function resetBar(): void {
 export function stopBar(): void {
   resetBar();
   cancelInterval();
-  process.stdout.write("\n\n");
+  process.stdout.write("\n");
   process.stdout.write(`${bar.join("").repeat(50)} 100%`);
   process.stdout.write("\n");
 }
