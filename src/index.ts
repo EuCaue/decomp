@@ -1,25 +1,23 @@
 #!/usr/bin/env node
 import { extname } from "path";
 import { exit } from "process";
+import files from "./argParser";
 import extractFile from "./extractFile";
 
-const hasOneFile: boolean = process.argv.length === 3;
-const hasTwoOrMoreFiles: boolean = process.argv.length > 3;
+const hasOneFile: boolean = files.length === 1;
+const hasTwoOrMoreFiles: boolean = files.length >= 2;
 
-function main(argPos: number): void {
-  const file = process.argv[argPos];
+function main(file: string): void {
   const fileType = extname(file);
   extractFile(file, fileType);
 }
 
 if (hasOneFile) {
-  const argPos: number = 2;
-  main(argPos);
+  const file: string = files[0];
+  main(file);
 } else if (hasTwoOrMoreFiles) {
-  for (const argPos in process.argv) {
-    if (+argPos > 1) {
-      main(+argPos);
-    }
+  for (const file of files) {
+    main(file);
   }
 } else {
   console.log("No file(s) to extract!");

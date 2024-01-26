@@ -15,6 +15,7 @@ function setBar(): void {
 export function startBar(ms: number = 150): void {
   intervalId = setInterval(() => {
     setBar();
+    // console.log("from start", intervalId);
   }, ms);
 }
 
@@ -24,9 +25,12 @@ function resetBar(): void {
 }
 
 export function stopBar(): void {
-  clearInterval(intervalId);
   resetBar();
+  //  NOTE: for some reason, this works???
+  intervalId.unref();
+  clearInterval(1);
   process.stdout.write("\n\n");
   process.stdout.write(`${bar.join("").repeat(50)} 100%`);
   process.stdout.write("\n");
+  // console.log("from stop");
 }

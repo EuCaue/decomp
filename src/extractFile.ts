@@ -1,8 +1,9 @@
 import { spawn } from "child_process";
-import { mkdirSync } from "fs";
+import { mkdir } from "fs";
 import { basename } from "path";
 import checkBin from "./checkBin";
 import { startBar, stopBar } from "./progressBar";
+import { options } from "./argParser";
 
 type DecompCmd = string;
 type TarFileType = string;
@@ -43,36 +44,41 @@ const tarShortFileTypes: Set<TarFileType> = new Set([
 
 const ArchiveCommands = {
   unzip: (file: string, fileNameWithoutExt: string) => {
-    return `unzip -o ${file} -d ${fileNameWithoutExt}`;
+    const extractPath = `${options.outdir}/${fileNameWithoutExt}`;
+    return `unzip -o "${file}" -d "${extractPath}"`;
   },
   "7z": (file: string, fileNameWithoutExt: string) => {
-    return `7z e ${file} -o${fileNameWithoutExt}`;
+    const extractPath = `${options.outdir}/${fileNameWithoutExt}`;
+    return `7z e "${file}" -o"${extractPath}"`;
   },
   unrar: (file: string, fileNameWithoutExt: string) => {
-    return `unrar x ${file} -d ${fileNameWithoutExt}`;
+    const extractPath = `${options.outdir}/${fileNameWithoutExt}`;
+    mkdir(`${extractPath}`, { recursive: true }, () => {});
+    return `unrar x "${file}" -d "${extractPath}"`;
   },
   tar: (file: string, fileNameWithoutExt: string) => {
-    mkdirSync(`./${fileNameWithoutExt}`, { recursive: true });
+    const extractPath = `${options.outdir}/${fileNameWithoutExt}`;
+    mkdir(`${extractPath}`, { recursive: true }, () => {});
     if (/\.(tar\.gz|tgz|taz)$/.test(file) || /\.(tar\.Z|tZ|taZ)$/.test(file)) {
-      return `tar -xzf ${file} -C ${fileNameWithoutExt}`;
+      return `tar -xzf "${file}" -C "${extractPath}"`;
     }
     if (/\.(tar\.zst|tzst)$/.test(file) && checkBin("zstd")) {
-      return `tar -xvf ${file} -C ${fileNameWithoutExt}`;
+      return `tar -xvf "${file}" -C "${extractPath}"`;
     }
     if (/\.(tar\.xz|txz)$/.test(file)) {
-      return `tar -xJf ${file} -C ${fileNameWithoutExt}`;
+      return `tar -xJf "${file}" -C "${extractPath}"`;
     }
     if (/\.(tar\.bz2|tb2|tbz|tbz2|tz2)$/.test(file) && checkBin("bzip2")) {
-      return `tar -xvjf ${file} -C ${fileNameWithoutExt}`;
+      return `tar -xvjf "${file}" -C "${extractPath}"`;
     }
     if (/\.(tar\.lz)$/.test(file) && checkBin("lzip")) {
-      return `tar --lzip -xvf ${file} -C ${fileNameWithoutExt}`;
+      return `tar --lzip -xvf "${file}" -C "${extractPath}"`;
     }
     if (/\.(tar\.lzma|tlz)$/.test(file) && checkBin("lzma")) {
-      return `tar --lzma -xvf ${file} -C ${fileNameWithoutExt}`;
+      return `tar --lzma -xvf "${file}" -C "${extractPath}"`;
     }
     if (/\.(tar\.lzo)$/.test(file) && checkBin("lzop")) {
-      return `tar --lzop -xvf ${file} -C ${fileNameWithoutExt}`;
+      return `tar --lzop -xvf "${file}" -C "${extractPath}"`;
     }
     return `tar`;
   },
