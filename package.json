@@ -14,7 +14,7 @@
     "typescript": "^5.0.0"
   },
   "bin": {
-    "decomp": "./dist/index.js"
+    "decomp": "./dist/src/index.js"
   },
   "description": "A simple way to decompress files.",
   "homepage": "https://github.com/EuCaue/decomp#readme",
