@@ -18,7 +18,11 @@ npm install @eucaue/decomp -g
 decomp <FILE_PATH>
 ```
 
-## Contribution
+3. Help command to see all options
+
+```sh
+decomp --help
+```
 
 Contributions are welcome! Fork this repository, make your changes, and submit a pull request.
 
