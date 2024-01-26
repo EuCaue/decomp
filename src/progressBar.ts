@@ -15,7 +15,6 @@ function setBar(): void {
 export function startBar(ms: number = 150): void {
   intervalId = setInterval(() => {
     setBar();
-    // console.log("from start", intervalId);
   }, ms);
 }
 
@@ -32,5 +31,4 @@ export function stopBar(): void {
   process.stdout.write("\n\n");
   process.stdout.write(`${bar.join("").repeat(50)} 100%`);
   process.stdout.write("\n");
-  // console.log("from stop");
 }

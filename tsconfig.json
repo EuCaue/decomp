@@ -12,6 +12,7 @@
     "esModuleInterop": true /* Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility. */,
     "noUncheckedIndexedAccess": false /* Add 'undefined' to a type when accessed using an index. */,
     "moduleDetection": "force",
+    "resolveJsonModule": true,
     "declaration": false,
     "allowJs": false,
     // "rootDir": "./src",
