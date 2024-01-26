@@ -1,6 +1,26 @@
 const bar: string[] = [] as const;
 let firstRunInterval: boolean = true;
-let intervalId: NodeJS.Timeout;
+let cancelInterval: () => void;
+let canceledInterval: boolean = false;
+
+//  HACK: some reason setInterval doesn't work, so here a function to simulate.
+function simulateSetInterval(
+  callback: () => void,
+  interval: number,
+): () => void {
+  function execute() {
+    if (!canceledInterval) {
+      callback();
+      setTimeout(execute, interval);
+    }
+  }
+
+  execute();
+
+  return function cancel() {
+    canceledInterval = true;
+  };
+}
 
 function setBar(): void {
   if (firstRunInterval === false) {
@@ -13,9 +33,7 @@ function setBar(): void {
 }
 
 export function startBar(ms: number = 150): void {
-  intervalId = setInterval(() => {
-    setBar();
-  }, ms);
+  cancelInterval = simulateSetInterval(setBar, ms);
 }
 
 function resetBar(): void {
@@ -25,9 +43,7 @@ function resetBar(): void {
 
 export function stopBar(): void {
   resetBar();
-  //  NOTE: for some reason, this works???
-  intervalId.unref();
-  clearInterval(1);
+  cancelInterval();
   process.stdout.write("\n\n");
   process.stdout.write(`${bar.join("").repeat(50)} 100%`);
   process.stdout.write("\n");

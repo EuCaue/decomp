@@ -123,7 +123,7 @@ export default function extractFile(filePath: string, fileType: string): void {
       shell: true,
     });
     startBar();
-    commandProcess.stdout.on("close", () => {
+    commandProcess.stdout.on("end", () => {
       process.stdout.write("-".repeat(basename(filePath).length * 2));
       process.stdout.write("\n");
       process.stdout.write(`File ${basename(filePath)} extracted\n`);
