@@ -12,7 +12,7 @@ const FileExtensionToCommandMap = new Map([
   [".rar", "unrar"],
   [".7z", "7z"],
   [".zip", "unzip"],
-  [".tar", "tar"],
+  [".tar", "tar"]
 ]);
 
 const supportedFileTypes = new Set([".rar", ".7z", ".zip", ".tar"]);
@@ -25,7 +25,7 @@ const tarLongFileTypes: Set<TarFileType> = new Set([
   ".lzma",
   ".lzo",
   ".Z",
-  ".zst",
+  ".zst"
 ]);
 
 const tarShortFileTypes: Set<TarFileType> = new Set([
@@ -39,7 +39,7 @@ const tarShortFileTypes: Set<TarFileType> = new Set([
   ".tlz",
   ".tZ",
   ".taZ",
-  ".tzst",
+  ".tzst"
 ]);
 
 const ArchiveCommands = {
@@ -81,14 +81,15 @@ const ArchiveCommands = {
       return `tar --lzop -xvf "${file}" -C "${extractPath}"`;
     }
     return `tar`;
-  },
+  }
 } as const;
 
 function getProgramCmd(file: string, fileType: string): DecompCmd {
   let isTar = false;
 
   if (tarLongFileTypes.has(fileType)) {
-    fileType = ".tar" + fileType;
+    // eslint-disable-next-line no-param-reassign
+    fileType = `.tar${fileType}`;
     isTar = true;
   }
 
@@ -103,13 +104,13 @@ function getProgramCmd(file: string, fileType: string): DecompCmd {
   const fileNameWithoutExt: string = basename(file, fileType);
 
   const cmdTypeKey = FileExtensionToCommandMap.get(
-    selectedFileFormat as string,
+    selectedFileFormat as string
   ) as keyof typeof ArchiveCommands;
   return ArchiveCommands[cmdTypeKey](file, fileNameWithoutExt);
 }
 
 function checkFileTypes(fileType: string): boolean {
-  let isTar: boolean =
+  const isTar: boolean =
     tarLongFileTypes.has(fileType) || tarShortFileTypes.has(fileType);
   return (
     (supportedFileTypes.has(fileType) || isTar) &&
@@ -125,7 +126,7 @@ function flush() {
 export default function extractFile(filePath: string, fileType: string): void {
   if (checkFileTypes(fileType)) {
     const commandProcess = spawn(getProgramCmd(filePath, fileType), {
-      shell: true,
+      shell: true
     });
     startBar();
     commandProcess.stdout.on("end", () => {

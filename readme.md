@@ -1,13 +1,14 @@
 # decomp 📁
 
 <!--toc:start-->
+
 - [decomp 📁](#decomp-📁)
   - [Demo](#demo)
   - [Usage](#usage)
   - [Features](#features)
   - [Contributing](#contributing)
   - [License](#license)
-<!--toc:end-->
+  <!--toc:end-->
 
 > A simple way to decompress files.
 

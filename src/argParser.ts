@@ -6,12 +6,11 @@ export type Options = {
   outdir: string;
 };
 
-let files: string[] = [];
+export const files: string[] = [];
 
 function parsePath(path: string): string {
   const parsedPath = parse(path);
-  const dir = parsedPath.dir;
-  const base = parsedPath.base;
+  const { dir, base } = parsedPath;
   return join(dir, base);
 }
 
@@ -23,15 +22,14 @@ program.option(
   "-o, --outdir <PATH>",
   "set the output directory",
   parsePath,
-  "./",
+  "./"
 );
 
 program.arguments("<files...>").action((args: string[]) => {
   //  TODO: make work for arguments with spaces without quotes
-  files = args;
+  files.push(...args);
 });
 
 program.parse();
 
 export const options: Options = program.opts();
-export default files;

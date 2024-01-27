@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { extname } from "path";
 import { exit } from "process";
-import files from "./argParser";
+import { files } from "./argParser";
 import extractFile from "./extractFile";
 
 const hasOneFile: boolean = files.length === 1;
@@ -16,9 +16,9 @@ if (hasOneFile) {
   const file: string = files[0];
   main(file);
 } else if (hasTwoOrMoreFiles) {
-  for (const file of files) {
+  files.forEach((file) => {
     main(file);
-  }
+  });
 } else {
   console.log("No file(s) to extract!");
   exit(1);
