@@ -5,7 +5,7 @@
   "type": "commonjs",
   "repository": {
     "type": "git",
-    "url": "https://github.com/EuCaue/decomp.git"
+    "url": "git+https://github.com/EuCaue/decomp.git"
   },
   "devDependencies": {
     "@types/bun": "latest"
@@ -14,7 +14,7 @@
     "typescript": "^5.0.0"
   },
   "bin": {
-    "decomp": "./dist/src/index.js"
+    "decomp": "dist/src/index.js"
   },
   "description": "A simple way to decompress files.",
   "homepage": "https://github.com/EuCaue/decomp#readme",
@@ -30,7 +30,7 @@
   ],
   "license": "GPL3",
   "scripts": {
-    "prepublish": "npm run build",
+    "prepare": "npm run build",
     "build": "tsc",
     "dev": "bun run ./src/index.ts"
   },
