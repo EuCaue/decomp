@@ -21,16 +21,9 @@
 
 ## Demo
 
-
-
-https://github.com/EuCaue/decomp/assets/69485603/4f2c65aa-39f4-44f0-8090-2e1650f1a3ce
-
-
+<https://github.com/EuCaue/decomp/assets/69485603/4f2c65aa-39f4-44f0-8090-2e1650f1a3ce>
 
 ## Usage
-
-
-
 
 <small><strong>NPM and NodeJS</strong> is required.</small>
 
