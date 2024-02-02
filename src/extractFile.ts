@@ -49,7 +49,7 @@ const ArchiveCommands = {
   },
   "7z": (file: string, fileNameWithoutExt: string) => {
     const extractPath = `${options.outdir}/${fileNameWithoutExt}`;
-    return `7z e "${file}" -o"${extractPath}"`;
+    return `7z e "${file}" -o"${extractPath}" -y`;
   },
   unrar: (file: string, fileNameWithoutExt: string) => {
     const extractPath = `${options.outdir}/${fileNameWithoutExt}`;
