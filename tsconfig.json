@@ -13,7 +13,6 @@
     "resolveJsonModule": true,
     "declaration": false,
     "allowJs": false,
-    // "rootDir": "./src",
     "outDir": "./dist",
     "verbatimModuleSyntax": false,
     /* Linting */
