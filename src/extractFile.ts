@@ -43,20 +43,20 @@ const tarShortFileTypes: Set<TarFileType> = new Set([
 ]);
 
 const ArchiveCommands = {
-  unzip: (file: string, fileNameWithoutExt: string) => {
+  unzip: (file: string, fileNameWithoutExt: string, options: Options) => {
     const extractPath = `${options.outdir}/${fileNameWithoutExt}`;
     return `unzip -o "${file}" -d "${extractPath}"`;
   },
-  "7z": (file: string, fileNameWithoutExt: string) => {
+  "7z": (file: string, fileNameWithoutExt: string, options: Options) => {
     const extractPath = `${options.outdir}/${fileNameWithoutExt}`;
     return `7z e "${file}" -o"${extractPath}" -y`;
   },
-  unrar: (file: string, fileNameWithoutExt: string) => {
+  unrar: (file: string, fileNameWithoutExt: string, options: Options) => {
     const extractPath = `${options.outdir}/${fileNameWithoutExt}`;
     mkdir(`${extractPath}`, { recursive: true }, () => {});
     return `unrar x "${file}" -d "${extractPath}"`;
   },
-  tar: (file: string, fileNameWithoutExt: string) => {
+  tar: (file: string, fileNameWithoutExt: string, options: Options) => {
     const extractPath = `${options.outdir}/${fileNameWithoutExt}`;
     mkdir(`${extractPath}`, { recursive: true }, () => {});
     if (/\.(tar\.gz|tgz|taz)$/.test(file) || /\.(tar\.Z|tZ|taZ)$/.test(file)) {
@@ -84,7 +84,11 @@ const ArchiveCommands = {
   }
 } as const;
 
-function getProgramCmd(file: string, fileType: string): DecompCmd {
+function getProgramCmd(
+  file: string,
+  fileType: string,
+  options: Options
+): DecompCmd {
   let isTar = false;
 
   if (tarLongFileTypes.has(fileType)) {
@@ -106,7 +110,7 @@ function getProgramCmd(file: string, fileType: string): DecompCmd {
   const cmdTypeKey = FileExtensionToCommandMap.get(
     selectedFileFormat as string
   ) as keyof typeof ArchiveCommands;
-  return ArchiveCommands[cmdTypeKey](file, fileNameWithoutExt);
+  return ArchiveCommands[cmdTypeKey](file, fileNameWithoutExt, options);
 }
 
 function checkFileTypes(fileType: string): boolean {
@@ -118,26 +122,37 @@ function checkFileTypes(fileType: string): boolean {
   );
 }
 
-function flush() {
+function flush(): void {
   process.stdout.clearLine(0);
   process.stdout.cursorTo(0);
 }
 
-export default function extractFile(filePath: string, fileType: string): void {
-  if (checkFileTypes(fileType)) {
-    const commandProcess = spawn(getProgramCmd(filePath, fileType), {
-      shell: true
-    });
-    startBar();
-    commandProcess.stdout.on("end", () => {
-      flush();
-      process.stdout.write("-".repeat(basename(filePath).length * 2));
-      process.stdout.write("\n");
-      process.stdout.write(`File ${basename(filePath)} extracted\n`);
-      process.stdout.write("-".repeat(basename(filePath).length * 2));
-      stopBar();
-    });
-  } else {
-    console.error(`${basename(filePath)} has a unsupported file type!`);
-  }
+export default function extractFile(
+  filePath: string,
+  fileType: string,
+  options: Options
+): Promise<boolean | undefined> {
+  return new Promise((resolve) => {
+    if (checkFileTypes(fileType)) {
+      const commandProcess = spawn(getProgramCmd(filePath, fileType, options), {
+        shell: true
+      });
+      console.log("starting");
+      startBar();
+      commandProcess.stdout.on("end", () => {
+        flush();
+        process.stdout.write("-".repeat(basename(filePath).length * 2));
+        process.stdout.write("\n");
+        process.stdout.write(`File ${basename(filePath)} extracted\n`);
+        process.stdout.write("-".repeat(basename(filePath).length * 2));
+        stopBar();
+        console.log("true");
+        resolve(true);
+      });
+    } else {
+      console.error(`${basename(filePath)} has a unsupported file type!`);
+      console.log("false");
+      resolve(false);
+    }
+  });
 }

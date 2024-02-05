@@ -9,6 +9,7 @@ const hasTwoOrMoreFiles: boolean = files.length >= 2;
 
 function main(file: string): void {
   const fileType = extname(file);
+  extractFile(file, fileType, options);
 }
 
 if (hasOneFile) {
