@@ -137,7 +137,6 @@ export default function extractFile(
       const commandProcess = spawn(getProgramCmd(filePath, fileType, options), {
         shell: true
       });
-      console.log("starting");
       startBar();
       commandProcess.stdout.on("end", () => {
         flush();
@@ -146,12 +145,10 @@ export default function extractFile(
         process.stdout.write(`File ${basename(filePath)} extracted\n`);
         process.stdout.write("-".repeat(basename(filePath).length * 2));
         stopBar();
-        console.log("true");
         resolve(true);
       });
     } else {
       console.error(`${basename(filePath)} has a unsupported file type!`);
-      console.log("false");
       resolve(false);
     }
   });

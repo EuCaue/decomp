@@ -1,7 +1,7 @@
 /* eslint-disable import/no-unresolved */
-import extractFile from "@/extractFile";
 import { describe, expect, it } from "bun:test";
 import { extname } from "path";
+import extractFile from "../src/extractFile";
 
 describe("Extract File", () => {
   it("should extract file to a specific folder", async () => {

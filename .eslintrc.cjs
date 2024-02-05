@@ -43,6 +43,7 @@ module.exports = {
   plugins: ["prettier", "@typescript-eslint"],
   rules: {
     "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
+    "no-console": ["error", { allow: ["error"] }],
     "@typescript-eslint/consistent-type-definitions": ["error", "type"],
     "prettier/prettier": ["error"],
     "import/extensions": [
@@ -50,7 +51,7 @@ module.exports = {
       "ignorePackages",
       {
         ts: "never",
-        json: "never"
+        json: "ignorePackages"
       }
     ]
   }

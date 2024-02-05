@@ -20,6 +20,6 @@ if (hasOneFile) {
     main(file);
   });
 } else {
-  console.log("No file(s) to extract!");
+  console.error("No file(s) to extract!");
   exit(1);
 }
