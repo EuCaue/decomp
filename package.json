@@ -44,6 +44,7 @@
     "prepare": "npm run build",
     "build": "tsc",
     "lint": "prettier --check . & eslint . --ext .ts",
+    "test": "bun test",
     "format": "prettier --write . && eslint . --ext .ts --fix",
     "dev": "bun run ./src/index.ts"
   },
