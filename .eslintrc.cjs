@@ -1,7 +1,8 @@
 module.exports = {
   root: true,
   env: {
-    es2021: true
+    es2021: true,
+    jest: true
   },
   extends: [
     "airbnb",
@@ -28,13 +29,29 @@ module.exports = {
     ecmaVersion: "latest",
     sourceType: "module",
     project: true,
-    tsconfigRootDir: __dirname
+    tsconfigRootDir: "./"
+  },
+  settings: {
+    "import/resolver": {
+      alias: {
+        map: [["@", "./src"]],
+        extensions: [".js", ".jsx", ".ts", ".tsx", ".json"]
+      }
+    }
   },
 
   plugins: ["prettier", "@typescript-eslint"],
   rules: {
+    "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
     "@typescript-eslint/consistent-type-definitions": ["error", "type"],
     "prettier/prettier": ["error"],
-    "no-console": ["error", { allow: ["log", "warn", "error"] }]
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        ts: "never",
+        json: "never"
+      }
+    ]
   }
 };
