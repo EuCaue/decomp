@@ -1,9 +1,9 @@
 import { spawn } from "child_process";
 import { mkdir } from "fs";
 import { basename } from "path";
-import checkBin from "./checkBin";
-import { startBar, stopBar } from "./progressBar";
-import { options } from "./argParser";
+import checkBin from "@/checkBin";
+import { startBar, stopBar } from "@/progressBar";
+import { type Options } from "@/argParser";
 
 type DecompCmd = string;
 type TarFileType = string;

@@ -48,6 +48,7 @@
     "dev": "bun run ./src/index.ts"
   },
   "dependencies": {
-    "commander": "^11.1.0"
+    "commander": "^11.1.0",
+    "eslint-import-resolver-alias": "^1.1.2"
   }
 }

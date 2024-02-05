@@ -1,15 +1,14 @@
 #!/usr/bin/env node
 import { extname } from "path";
 import { exit } from "process";
-import { files } from "./argParser";
-import extractFile from "./extractFile";
+import { files, options } from "@/argParser";
+import extractFile from "@/extractFile";
 
 const hasOneFile: boolean = files.length === 1;
 const hasTwoOrMoreFiles: boolean = files.length >= 2;
 
 function main(file: string): void {
   const fileType = extname(file);
-  extractFile(file, fileType);
 }
 
 if (hasOneFile) {
