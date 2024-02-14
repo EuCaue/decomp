@@ -1,6 +1,6 @@
 import { spawn } from "child_process";
-import { mkdir } from "fs";
 import { basename } from "path";
+import ArchiveExtractor from "@/archiveExtractor";
 import checkBin from "@/checkBin";
 import { startBar, stopBar } from "@/progressBar";
 import { type Options } from "@/argParser";
@@ -42,48 +42,6 @@ const tarShortFileTypes: Set<TarFileType> = new Set([
   ".tzst"
 ]);
 
-const ArchiveCommands = {
-  unzip: (file: string, fileNameWithoutExt: string, options: Options) => {
-    const extractPath = `${options.outdir}/${fileNameWithoutExt}`;
-    return `unzip -o "${file}" -d "${extractPath}"`;
-  },
-  "7z": (file: string, fileNameWithoutExt: string, options: Options) => {
-    const extractPath = `${options.outdir}/${fileNameWithoutExt}`;
-    return `7z e "${file}" -o"${extractPath}" -y`;
-  },
-  unrar: (file: string, fileNameWithoutExt: string, options: Options) => {
-    const extractPath = `${options.outdir}/${fileNameWithoutExt}`;
-    mkdir(`${extractPath}`, { recursive: true }, () => {});
-    return `unrar x "${file}" -d "${extractPath}"`;
-  },
-  tar: (file: string, fileNameWithoutExt: string, options: Options) => {
-    const extractPath = `${options.outdir}/${fileNameWithoutExt}`;
-    mkdir(`${extractPath}`, { recursive: true }, () => {});
-    if (/\.(tar\.gz|tgz|taz)$/.test(file) || /\.(tar\.Z|tZ|taZ)$/.test(file)) {
-      return `tar -xzf "${file}" -C "${extractPath}"`;
-    }
-    if (/\.(tar\.zst|tzst)$/.test(file) && checkBin("zstd")) {
-      return `tar -xvf "${file}" -C "${extractPath}"`;
-    }
-    if (/\.(tar\.xz|txz)$/.test(file)) {
-      return `tar -xJf "${file}" -C "${extractPath}"`;
-    }
-    if (/\.(tar\.bz2|tb2|tbz|tbz2|tz2)$/.test(file) && checkBin("bzip2")) {
-      return `tar -xvjf "${file}" -C "${extractPath}"`;
-    }
-    if (/\.(tar\.lz)$/.test(file) && checkBin("lzip")) {
-      return `tar --lzip -xvf "${file}" -C "${extractPath}"`;
-    }
-    if (/\.(tar\.lzma|tlz)$/.test(file) && checkBin("lzma")) {
-      return `tar --lzma -xvf "${file}" -C "${extractPath}"`;
-    }
-    if (/\.(tar\.lzo)$/.test(file) && checkBin("lzop")) {
-      return `tar --lzop -xvf "${file}" -C "${extractPath}"`;
-    }
-    return `tar`;
-  }
-} as const;
-
 function getProgramCmd(
   file: string,
   fileType: string,
@@ -92,8 +50,7 @@ function getProgramCmd(
   let isTar = false;
 
   if (tarLongFileTypes.has(fileType)) {
-    // eslint-disable-next-line no-param-reassign
-    fileType = `.tar${fileType}`;
+    fileType = `.tar${fileType}`; // eslint-disable-line no-param-reassign
     isTar = true;
   }
 
@@ -107,10 +64,16 @@ function getProgramCmd(
 
   const fileNameWithoutExt: string = basename(file, fileType);
 
-  const cmdTypeKey = FileExtensionToCommandMap.get(
+  const archiveExtractor = new ArchiveExtractor(
+    options,
+    file,
+    fileNameWithoutExt
+  );
+  const cmdFileTypeKey = FileExtensionToCommandMap.get(
     selectedFileFormat as string
-  ) as keyof typeof ArchiveCommands;
-  return ArchiveCommands[cmdTypeKey](file, fileNameWithoutExt, options);
+  ) as keyof typeof archiveExtractor;
+
+  return archiveExtractor[cmdFileTypeKey]();
 }
 
 function checkFileTypes(fileType: string): boolean {
