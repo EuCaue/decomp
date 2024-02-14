@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["src/*"]
     },
     "target": "ES2016",
     "module": "commonjs",
@@ -12,6 +12,7 @@
     "moduleDetection": "force",
     "resolveJsonModule": true,
     "declaration": false,
+    "baseUrl": "./",
     "allowJs": false,
     "outDir": "./dist",
     "verbatimModuleSyntax": false,
