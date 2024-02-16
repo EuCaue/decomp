@@ -42,27 +42,32 @@ const tarShortFileTypes: Set<TarFileType> = new Set([
   ".tzst"
 ]);
 
-function getProgramCmd(
-  file: string,
-  fileType: string,
-  options: Options
-): DecompCmd {
+function handleFileFormat(ft: string) {
   let isTar = false;
 
-  if (tarLongFileTypes.has(fileType)) {
-    fileType = `.tar${fileType}`; // eslint-disable-line no-param-reassign
+  if (tarLongFileTypes.has(ft)) {
+    ft = `.tar${ft}`; // eslint-disable-line no-param-reassign
     isTar = true;
   }
 
-  if (!isTar && tarShortFileTypes.has(fileType)) {
+  if (!isTar && tarShortFileTypes.has(ft)) {
     isTar = true;
   }
 
   const selectedFileFormat = isTar
     ? ".tar"
-    : (fileType as keyof typeof FileExtensionToCommandMap);
+    : (ft as keyof typeof FileExtensionToCommandMap);
 
-  const fileNameWithoutExt: string = basename(file, fileType);
+  return [selectedFileFormat, ft] as const;
+}
+
+function getProgramCmd(
+  file: string,
+  fileType: string,
+  options: Options
+): DecompCmd {
+  const [selectedFileFormat, ft] = handleFileFormat(fileType);
+  const fileNameWithoutExt = basename(file, ft);
 
   const archiveExtractor = new ArchiveExtractor(
     options,
