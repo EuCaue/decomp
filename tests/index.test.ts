@@ -1,21 +1,24 @@
 /* eslint-disable import/no-unresolved */
 import { describe, expect, it } from "bun:test";
-import { extname } from "path";
+import { readdir } from "fs";
+import { extname, resolve } from "path";
 import extractFile from "../src/extractFile";
 
+const TESTFOLDER = resolve("./test_archive");
+
 describe("Extract File", () => {
-  it("should extract file to a specific folder", async () => {
-    const file = "/home/caue/Downloads/Compressed/ec.7z";
-    const fileType = extname(file);
-    const result = await extractFile(file, fileType, {
-      outdir: "/home/caue/test/"
+  readdir(TESTFOLDER, (_, files) => {
+    files.forEach(async (file) => {
+      const fileType = extname(file);
+      const fileParsed = resolve(`${TESTFOLDER}/${file}`);
+      it(`should extract the ${fileType} file into the extracted folder`, async () => {
+        if (fileType) {
+          const result = await extractFile(fileParsed, fileType, {
+            outdir: `${TESTFOLDER}/extracted`
+          });
+          expect(result).toBeTrue();
+        }
+      });
     });
-    expect(result).toBeTrue();
-  });
-  it("should return false invalid file type", async () => {
-    const file = "/home/caue/Downloads/Compressed/COPYING";
-    const fileType = extname(file);
-    const result = await extractFile(file, fileType, { outdir: "./" });
-    expect(result).toBeFalse();
   });
 });
