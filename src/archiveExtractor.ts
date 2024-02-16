@@ -29,7 +29,7 @@ export default class ArchiveExtractor {
 
   public unrar(): DecompCmd {
     mkdir(`${this.extractPath}`, { recursive: true }, () => {});
-    return `unrar x "${this.file}" -d "${this.extractPath}"`;
+    return `unrar x "${this.file}" "${this.extractPath}"`;
   }
 
   private tarCommands = new Map([
