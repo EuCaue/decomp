@@ -1,7 +1,8 @@
 import { type Options } from "@/argParser";
 import checkBin from "@/checkBin";
 import { mkdir } from "fs";
-import { extname } from "path";
+import { exit } from "process";
+import { extname, resolve } from "path";
 
 type DecompCmd = string;
 
@@ -15,7 +16,7 @@ export default class ArchiveExtractor {
     private file: string,
     private fileNameWithoutExt: string
   ) {
-    this.extractPath = `${options.outdir}/${fileNameWithoutExt}`;
+    this.extractPath = resolve(`${options.outdir}/${fileNameWithoutExt}`);
     this.fileType = extname(file);
   }
 
@@ -28,8 +29,13 @@ export default class ArchiveExtractor {
   }
 
   public unrar(): DecompCmd {
-    mkdir(`${this.extractPath}`, { recursive: true }, () => {});
-    return `unrar x "${this.file}" "${this.extractPath}"`;
+    mkdir(`${this.extractPath}`, { recursive: true }, (err) => {
+      if (err) {
+        console.error("Error creating directory: ", err);
+        exit(1);
+      }
+    });
+    return `unrar x "${this.file}" "${this.extractPath}" -y`;
   }
 
   private tarCommands = new Map([
