@@ -46,7 +46,6 @@ for format in "${formats[@]}"; do
 	echo "$demo_file" >/dev/null 2>&1
 	echo "You managed to successfully extract a $format!" >"$demo_file"
 
-	#  TODO: check if the binary it's available on the path.
 	case "$format" in
 	"rar")
 		check_bin "rar" "rar a \"$dest_name\" \"$demo_file\""
